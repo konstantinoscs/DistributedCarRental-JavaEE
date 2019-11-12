@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -17,6 +19,7 @@ public class CarRentalCompany {
 
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private String name;
     private List<Car> cars;
     private Set<CarType> carTypes = new HashSet<CarType>();
