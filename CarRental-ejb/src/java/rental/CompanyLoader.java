@@ -12,42 +12,23 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RentalStore {
-
-    private static Map<String, CarRentalCompany> rentals;
-
-    public static CarRentalCompany getRental(String company) {
-        CarRentalCompany out = RentalStore.getRentals().get(company);
-        if (out == null) {
-            throw new IllegalArgumentException("Company doesn't exist!: " + company);
-        }
-        return out;
-    }
+public class CompanyLoader {
     
-    public static synchronized Map<String, CarRentalCompany> getRentals(){
-        if(rentals == null){
-            rentals = new HashMap<String, CarRentalCompany>();
-            loadRental("hertz.csv");
-            loadRental("dockx.csv");
-        }
-        return rentals;
-    }
 
     public static void loadRental(String datafile) {
         try {
             CrcData data = loadData(datafile);
             CarRentalCompany company = new CarRentalCompany(data.name, data.regions, data.cars);
-            rentals.put(data.name, company);
-            Logger.getLogger(RentalStore.class.getName()).log(Level.INFO, "Loaded {0} from file {1}", new Object[]{data.name, datafile});
+            Logger.getLogger(CompanyLoader.class.getName()).log(Level.INFO, "Loaded {0} from file {1}", new Object[]{data.name, datafile});
         } catch (NumberFormatException ex) {
-            Logger.getLogger(RentalStore.class.getName()).log(Level.SEVERE, "bad file", ex);
+            Logger.getLogger(CompanyLoader.class.getName()).log(Level.SEVERE, "bad file", ex);
         } catch (IOException ex) {
-            Logger.getLogger(RentalStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompanyLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public static CrcData loadData(String datafile)
+    private static CrcData loadData(String datafile)
             throws NumberFormatException, IOException {
 
         CrcData out = new CrcData();
@@ -55,7 +36,7 @@ public class RentalStore {
         int nextuid = 0;
        
         //open file from jar
-        BufferedReader in = new BufferedReader(new InputStreamReader(RentalStore.class.getClassLoader().getResourceAsStream(datafile)));
+        BufferedReader in = new BufferedReader(new InputStreamReader(CompanyLoader.class.getClassLoader().getResourceAsStream(datafile)));
         
         try {
             while (in.ready()) {

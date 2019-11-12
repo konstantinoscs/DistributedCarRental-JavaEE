@@ -15,5 +15,7 @@ public interface ManagerSessionRemote {
     public int getNumberOfReservations(String company, String type, int carId);
     
     public int getNumberOfReservations(String company, String type);
+    
+    public void loadCarRentalCompany(String file);
       
 }
