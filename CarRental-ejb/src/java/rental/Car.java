@@ -3,9 +3,13 @@ package rental;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Car {
-
+    
+    @Id
     private int id;
     private CarType type;
     private Set<Reservation> reservations;
