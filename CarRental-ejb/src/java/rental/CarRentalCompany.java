@@ -18,9 +18,11 @@ public class CarRentalCompany {
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     @Id
     private String name;
+    @OneToMany
     private List<Car> cars;
+    @OneToMany
     private Set<CarType> carTypes = new HashSet<CarType>();
-	private List<String> regions;
+    private List<String> regions;
 
 	
     /***************
@@ -63,7 +65,6 @@ public class CarRentalCompany {
     /*************
      * CAR TYPES *
      *************/
-    @OneToMany
     public Collection<CarType> getAllTypes() {
         return carTypes;
     }

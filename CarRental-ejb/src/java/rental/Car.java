@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Car {
@@ -12,6 +13,7 @@ public class Car {
     @Id
     private int id;
     private CarType type;
+    @OneToMany
     private Set<Reservation> reservations;
 
     /***************
