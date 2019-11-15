@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class CarType implements Serializable{
+public class CarType implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
