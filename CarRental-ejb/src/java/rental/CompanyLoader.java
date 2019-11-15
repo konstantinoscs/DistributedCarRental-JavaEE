@@ -15,16 +15,19 @@ import java.util.logging.Logger;
 public class CompanyLoader {
     
 
-    public static void loadRental(String datafile) {
+    public static CarRentalCompany loadRental(String datafile) {
+        CarRentalCompany company = null;
         try {
             CrcData data = loadData(datafile);
-            CarRentalCompany company = new CarRentalCompany(data.name, data.regions, data.cars);
+            company = new CarRentalCompany(data.name, data.regions, data.cars);
             Logger.getLogger(CompanyLoader.class.getName()).log(Level.INFO, "Loaded {0} from file {1}", new Object[]{data.name, datafile});
         } catch (NumberFormatException ex) {
             Logger.getLogger(CompanyLoader.class.getName()).log(Level.SEVERE, "bad file", ex);
         } catch (IOException ex) {
             Logger.getLogger(CompanyLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return company;
 
     }
 

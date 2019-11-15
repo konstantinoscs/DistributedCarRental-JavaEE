@@ -23,8 +23,9 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         // TODO: use updated manager interface to load cars into companies
         Main main = new Main("trips");
         ManagerSessionRemote ms = main.getNewManagerSession("Manager");
-        ms.loadCarRentalCompany();
-        new Main("trips").run();
+        ms.loadCarRentalCompany("hertz.csv");
+        ms.loadCarRentalCompany("dockx.csv");
+        main.run();
     }
 
     @Override
