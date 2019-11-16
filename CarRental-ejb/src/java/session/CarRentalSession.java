@@ -85,6 +85,11 @@ public class CarRentalSession implements CarRentalSessionRemote {
             }
             throw new ReservationException(e);
         }
+        
+        //save reservations in the db
+        for(Reservation res: done) {
+            em.persist(res);
+        }
         return done;
     }
 
