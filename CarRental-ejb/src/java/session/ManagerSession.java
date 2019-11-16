@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -14,10 +16,13 @@ import rental.Reservation;
 @Stateless
 public class ManagerSession implements ManagerSessionRemote {
     
+    @PersistenceContext
+    EntityManager em;
+    
     @Override
     public Set<CarType> getCarTypes(String company) {
         try {
-            return new HashSet<CarType>(CompanyLoader.getRental(company).getAllTypes());
+            //return new HashSet<CarType>(CompanyLoader.getRental(company).getAllTypes());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -64,8 +69,8 @@ public class ManagerSession implements ManagerSessionRemote {
 
     @Override
     public void loadCarRentalCompany(String file) {
-        CompanyLoader.loadRental(file);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CarRentalCompany company = CompanyLoader.loadRental(file);
+        em.persist(company);
     }
 
 }

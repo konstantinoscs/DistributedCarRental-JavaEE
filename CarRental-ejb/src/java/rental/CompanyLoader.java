@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class CompanyLoader {
     
-
     public static CarRentalCompany loadRental(String datafile) {
         CarRentalCompany company = null;
         try {

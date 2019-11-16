@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import rental.CarRentalCompany;
 import rental.CarType;
 import rental.Quote;
 import rental.CompanyLoader;
@@ -15,20 +19,27 @@ import rental.ReservationException;
 
 @Stateful
 public class CarRentalSession implements CarRentalSessionRemote {
+    
+    @PersistenceContext
+    EntityManager em;
 
     private String renter;
     private List<Quote> quotes = new LinkedList<Quote>();
+    
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        return new HashSet<String>(CompanyLoader.getRentals().keySet());
+        TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
+        return new HashSet<String>(q.getResultList());
     }
     
     @Override
     public List<CarType> getAvailableCarTypes(Date start, Date end) {
         List<CarType> availableCarTypes = new LinkedList<CarType>();
-        for(String crc : getAllRentalCompanies()) {
-            for(CarType ct : CompanyLoader.getRentals().get(crc).getAvailableCarTypes(start, end)) {
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
+        List<CarRentalCompany> companies = q.getResultList();
+        for(CarRentalCompany crc : companies) {
+            for(CarType ct : crc.getAvailableCarTypes(start, end)) {
                 if(!availableCarTypes.contains(ct))
                     availableCarTypes.add(ct);
             }

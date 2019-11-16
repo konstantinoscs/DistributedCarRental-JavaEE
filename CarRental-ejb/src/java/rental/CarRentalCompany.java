@@ -10,17 +10,34 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "getAllRentalCompaniesNames",
+        query = "SELECT c.name FROM CarRentalRompany c"
+    ),
+    @NamedQuery(
+        name = "getAllRentalCompanies",
+        query = "SELECT c FROM CarRentalRompany c"
+    ),
+    @NamedQuery(
+        name = "getCompanyByName",
+        query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
+    ),
+    @NamedQuery(
+        name = "getAvailableCarTypes",
+        query = "SELECT c from CarT"
+    )
+})
 public class CarRentalCompany implements Serializable {
 
-    private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
+    private static final transient Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private String name;
     @OneToMany
     private List<Car> cars;
@@ -32,6 +49,10 @@ public class CarRentalCompany implements Serializable {
     /***************
      * CONSTRUCTOR *
      ***************/
+    
+    public CarRentalCompany() {
+        
+    }
 
     public CarRentalCompany(String name, List<String> regions, List<Car> cars) {
         logger.log(Level.INFO, "<{0}> Starting up CRC {0} ...", name);

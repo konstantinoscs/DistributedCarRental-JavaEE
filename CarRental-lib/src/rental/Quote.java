@@ -15,6 +15,10 @@ public class Quote implements Serializable {
     /***************
      * CONSTRUCTOR *
      ***************/
+    
+    public Quote() {
+        
+    }
 
     public Quote(String carRenter, Date start, Date end, String rentalCompany, String carType, double rentalPrice) {
         this.carRenter = carRenter;
