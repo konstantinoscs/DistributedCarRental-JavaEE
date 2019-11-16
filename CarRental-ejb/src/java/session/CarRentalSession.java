@@ -49,8 +49,11 @@ public class CarRentalSession implements CarRentalSessionRemote {
 
     @Override
     public Quote createQuote(String company, ReservationConstraints constraints) throws ReservationException {
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", company);
         try {
-            Quote out = CompanyLoader.getRental(company).createQuote(constraints, renter);
+            CarRentalCompany crc = q.getSingleResult();
+            Quote out = crc.createQuote(constraints, renter);
             quotes.add(out);
             return out;
         } catch(Exception e) {
@@ -66,13 +69,20 @@ public class CarRentalSession implements CarRentalSessionRemote {
     @Override
     public List<Reservation> confirmQuotes() throws ReservationException {
         List<Reservation> done = new LinkedList<Reservation>();
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class);
         try {
             for (Quote quote : quotes) {
-                done.add(CompanyLoader.getRental(quote.getRentalCompany()).confirmQuote(quote));
+                //set name at the query for each quote
+                q.setParameter("name", quote.getRentalCompany());
+                CarRentalCompany company = q.getSingleResult();
+                done.add(company.confirmQuote(quote));
             }
         } catch (Exception e) {
-            for(Reservation r:done)
-                CompanyLoader.getRental(r.getRentalCompany()).cancelReservation(r);
+            for(Reservation r:done) {
+                q.setParameter("name", r.getRentalCompany());
+                CarRentalCompany company = q.getSingleResult();
+                company.cancelReservation(r);
+            }
             throw new ReservationException(e);
         }
         return done;
