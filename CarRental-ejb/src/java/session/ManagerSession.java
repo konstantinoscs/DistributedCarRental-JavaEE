@@ -35,7 +35,6 @@ public class ManagerSession implements ManagerSessionRemote {
     
     @Override
     public Set<CarType> getCarTypes(String company) {
-        Set<CarType> out = new HashSet<CarType>();
         TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
                 .setParameter("name", company);
         CarRentalCompany crc = q.getSingleResult();
@@ -61,6 +60,7 @@ public class ManagerSession implements ManagerSessionRemote {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+        return out;
     }
 
     @Override
