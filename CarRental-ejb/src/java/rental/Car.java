@@ -24,7 +24,7 @@ public class Car implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade={CascadeType.ALL})
     private CarType type;
     //ALL : any change happened on car must cascade to reservations
     @OneToMany(cascade=CascadeType.ALL)

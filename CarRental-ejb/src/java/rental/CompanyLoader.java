@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class CompanyLoader {
     
+    private static int nextuid = 0;
+    
     public static CarRentalCompany loadRental(String datafile) {
         CarRentalCompany company = null;
         try {
@@ -35,7 +37,6 @@ public class CompanyLoader {
 
         CrcData out = new CrcData();
         StringTokenizer csvReader;
-        int nextuid = 0;
        
         //open file from jar
         BufferedReader in = new BufferedReader(new InputStreamReader(CompanyLoader.class.getClassLoader().getResourceAsStream(datafile)));
