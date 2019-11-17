@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -92,6 +95,65 @@ public class ManagerSession implements ManagerSessionRemote {
         }
         return out.size();
     }
+    
+    @Override
+    public int getNumberOfReservationsBy(String clientName) {
+        int noOfReservations = 0;
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
+        List<CarRentalCompany> companies = q.getResultList();
+        for (CarRentalCompany company : companies) {
+            noOfReservations += company.getNoOfReservationsBy(clientName);
+        }
+        return noOfReservations;
+    }
+    
+    @Override
+    public int getNumberOfReservationsForCarType(String carRentalName, String carType) throws Exception {
+        TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
+        Set<String> companies =  new HashSet<String>(q.getResultList());
+        if (!companies.contains(carRentalName))
+            throw new Exception("Requested Car Rental Company is not registered!");
+        TypedQuery<CarRentalCompany> p = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", carRentalName);
+        CarRentalCompany crc = p.getSingleResult();
+        return crc.getNumberOfReservationsForCarType(carType);
+    }
+    
+    @Override
+    public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws Exception {
+        TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
+        Set<String> companies =  new HashSet<String>(q.getResultList());
+        if (!companies.contains(carRentalCompanyName))
+            throw new Exception("Requested Car Rental Company is not registered!");
+        TypedQuery<CarRentalCompany> p = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", carRentalCompanyName);
+        CarRentalCompany crc = p.getSingleResult();
+        return crc.getMostPopularCarTypeIn(year);
+    }
+    
+    public Set<String> getBestClients() {
+        Map<String, Integer> reservations = new HashMap<>();
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
+        List<CarRentalCompany> companies = q.getResultList();
+        for (CarRentalCompany company : companies) {
+            updateMap(reservations, company.getClientsWithReservations());
+        }
+        //TODO figure out how to express this in java source 1.7
+        max = Collections.max(reservations.entrySet(), Map.Entry.comparingByValue()).getValue();
+        // after we found the max, get all clients that have max number of reservations
+        return reservations.entrySet().stream()
+                .filter(e -> e.getValue().equals(max))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
+    
+    
+    private void updateMap(Map<String, Integer> reservations, Map<String, Integer> tempReservations) {
+        for (Map.Entry<String, Integer> entry : tempReservations.entrySet()) {
+            reservations.put(entry.getKey(), reservations.getOrDefault(entry.getKey(), 0) + entry.getValue());
+        }
+    }
+    
 
     @Override
     public void loadCarRentalCompany(String file) {

@@ -45,6 +45,28 @@ public class CarRentalSession implements CarRentalSessionRemote {
         }
         return availableCarTypes;
     }
+    
+    @Override
+    public String getCheapestCarType(Date start, Date end, String region) {
+        double minPrice = Double.MAX_VALUE;
+        String cheapestCarType = "";
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
+        List<CarRentalCompany> companies = q.getResultList();
+        for (CarRentalCompany company : companies) {
+            if (!company.operatesInRegion(region)) {
+                continue;
+            }
+            Set<CarType> carTypes = company.getAvailableCarTypes(start, end);
+            for (CarType carType : carTypes) {
+                if (carType.getRentalPricePerDay() < minPrice) {
+                    minPrice = carType.getRentalPricePerDay();
+                    cheapestCarType = carType.getName();
+                }
+            }
+
+        }
+        return cheapestCarType;
+    }
 
     @Override
     public Quote createQuote(String company, ReservationConstraints constraints) throws ReservationException {
@@ -64,6 +86,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
     public List<Quote> getCurrentQuotes() {
         return quotes;
     }
+    
 
     @Override
     public List<Reservation> confirmQuotes() throws ReservationException {

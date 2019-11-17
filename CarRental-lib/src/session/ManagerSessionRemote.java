@@ -16,6 +16,14 @@ public interface ManagerSessionRemote {
     
     public int getNumberOfReservations(String company, String type);
     
+    public int getNumberOfReservationsBy(String clientName);
+    
+    public int getNumberOfReservationsForCarType(String carRentalName, String carType) throws Exception;
+    
+    public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws Exception;
+    
+    public Set<String> getBestClients();
+    
     public void loadCarRentalCompany(String file);
       
 }

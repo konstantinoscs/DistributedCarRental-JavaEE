@@ -91,4 +91,8 @@ public class Car implements Serializable {
     public Set<Reservation> getReservations() {
         return reservations;
     }
+    
+    public int getNoOfReservations() {
+        return reservations.size();
+    }
 }

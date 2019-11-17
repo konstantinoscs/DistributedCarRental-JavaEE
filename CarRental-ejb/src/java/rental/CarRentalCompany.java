@@ -3,9 +3,11 @@ package rental;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,6 +97,10 @@ public class CarRentalCompany implements Serializable {
     public List<String> getRegions() {
         return this.regions;
     }
+    
+    public boolean operatesInRegion(String region) {
+        return this.regions.contains(region);
+    }
 
     /*************
      * CAR TYPES *
@@ -124,6 +130,21 @@ public class CarRentalCompany implements Serializable {
             }
         }
         return availableCarTypes;
+    }
+    
+    public CarType getMostPopularCarTypeIn(int year) {
+        Map<CarType, Integer> carTypeReservations = new HashMap<>();
+        for (Car car : cars) {
+            for (Reservation reservation : car.getReservations()) {
+                if (reservation.getStartDate().getYear() + 1900 == year) {
+                    Integer prev = carTypeReservations.getOrDefault(car.getType(), 0);
+                    carTypeReservations.put(car.getType(), prev + 1);
+                }
+            }
+        }
+        if (carTypeReservations.isEmpty())
+            return null;
+        return Collections.max(carTypeReservations.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 
     /*********
@@ -167,6 +188,18 @@ public class CarRentalCompany implements Serializable {
             }
         }
         return availableCars;
+    }
+    
+    public Map<String, Integer> getClientsWithReservations() {
+        Map<String, Integer> reservations = new HashMap<>();
+        for (Car car : cars) {
+            for (Reservation reservation : car.getReservations()) {
+                String client = reservation.getCarRenter();
+                Integer prev = reservations.getOrDefault(client, 0);
+                reservations.put(client, prev + 1);
+            }
+        }
+        return reservations;
     }
 
     /****************
@@ -226,5 +259,19 @@ public class CarRentalCompany implements Serializable {
             }
         }
         return out;
+    }
+    
+    public int getNoOfReservationsBy(String clientName) {
+        return this.getReservationsBy(clientName).size();
+    }
+    
+    public int getNumberOfReservationsForCarType(String carType) {
+        int noOfReservations = 0;
+        for (Car car : cars) {
+            if (car.getType().getName().equals(carType)) {
+                noOfReservations += car.getNoOfReservations();
+            }
+        }
+        return noOfReservations;
     }
 }
