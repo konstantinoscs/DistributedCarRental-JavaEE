@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -35,47 +36,56 @@ public class ManagerSession implements ManagerSessionRemote {
     @Override
     public Set<CarType> getCarTypes(String company) {
         Set<CarType> out = new HashSet<CarType>();
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", company);
+        CarRentalCompany crc = q.getSingleResult();
         try {
-            //return new HashSet<CarType>(CompanyLoader.getRental(company).getAllTypes());
+            return new HashSet<CarType>(crc.getAllTypes());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        return out;
     }
 
     @Override
     public Set<Integer> getCarIds(String company, String type) {
         Set<Integer> out = new HashSet<Integer>();
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", company);
+        CarRentalCompany crc = q.getSingleResult();
         try {
-            //for(Car c: CompanyLoader.getRental(company).getCars(type)){
-             //   out.add(c.getId());
-           // }
+            for(Car c: crc.getCars(type)){
+                out.add(c.getId());
+            }
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        return out;
     }
 
     @Override
     public int getNumberOfReservations(String company, String type, int id) {
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", company);
+        CarRentalCompany crc = q.getSingleResult();
         try {
-           // return CompanyLoader.getRental(company).getCar(id).getReservations().size();
+            return crc.getCar(id).getReservations().size();
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
         }
-        return 0;
     }
 
     @Override
     public int getNumberOfReservations(String company, String type) {
         Set<Reservation> out = new HashSet<Reservation>();
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
+                .setParameter("name", company);
+        CarRentalCompany crc = q.getSingleResult();
         try {
-           // for(Car c: CompanyLoader.getRental(company).getCars(type)){
-             //   out.addAll(c.getReservations());
-           // }
+            for(Car c: crc.getCars(type)){
+                out.addAll(c.getReservations());
+            }
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
