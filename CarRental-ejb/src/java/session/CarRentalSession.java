@@ -20,84 +20,68 @@ import rental.ReservationException;
 @Stateful
 public class CarRentalSession implements CarRentalSessionRemote {
     
-    @PersistenceContext
-    EntityManager em;
-
     private String renter;
     private List<Quote> quotes = new LinkedList<Quote>();
-    
 
     @Override
     public Set<String> getAllRentalCompanies() {
-        TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
-        return new HashSet<String>(q.getResultList());
+        //return new HashSet<String>(CompanyLoader.getRentals().keySet());
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     @Override
     public List<CarType> getAvailableCarTypes(Date start, Date end) {
-        List<CarType> availableCarTypes = new LinkedList<CarType>();
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
-        List<CarRentalCompany> companies = q.getResultList();
-        for(CarRentalCompany crc : companies) {
-            for(CarType ct : crc.getAvailableCarTypes(start, end)) {
-                if(!availableCarTypes.contains(ct))
-                    availableCarTypes.add(ct);
-            }
-        }
-        return availableCarTypes;
+        //List<CarType> availableCarTypes = new LinkedList<CarType>();
+        //for(String crc : getAllRentalCompanies()) {
+        //    for(CarType ct : CompanyLoader.getRentals().get(crc).getAvailableCarTypes(start, end)) {
+        //        if(!availableCarTypes.contains(ct))
+        //            availableCarTypes.add(ct);
+        //    }
+        //}
+        //return availableCarTypes;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Quote createQuote(String company, ReservationConstraints constraints) throws ReservationException {
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        try {
-            CarRentalCompany crc = q.getSingleResult();
-            Quote out = crc.createQuote(constraints, renter);
-            quotes.add(out);
-            return out;
-        } catch(Exception e) {
-            throw new ReservationException(e);
-        }
+        //try {
+        //    Quote out = CompanyLoader.getRental(company).createQuote(constraints, renter);
+        //    quotes.add(out);
+        //    return out;
+        //} catch(Exception e) {
+        //    throw new ReservationException(e);
+        //}
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<Quote> getCurrentQuotes() {
-        return quotes;
+        throw new UnsupportedOperationException("Not supported yet.");
+        //return quotes;
     }
 
     @Override
     public List<Reservation> confirmQuotes() throws ReservationException {
-        List<Reservation> done = new LinkedList<Reservation>();
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class);
-        try {
-            for (Quote quote : quotes) {
-                //set name at the query for each quote
-                q.setParameter("name", quote.getRentalCompany());
-                CarRentalCompany company = q.getSingleResult();
-                done.add(company.confirmQuote(quote));
-            }
-        } catch (Exception e) {
-            for(Reservation r:done) {
-                q.setParameter("name", r.getRentalCompany());
-                CarRentalCompany company = q.getSingleResult();
-                company.cancelReservation(r);
-            }
-            throw new ReservationException(e);
-        }
-        
-        //save reservations in the db
-        for(Reservation res: done) {
-            em.persist(res);
-        }
-        return done;
+        //List<Reservation> done = new LinkedList<Reservation>();
+        //try {
+        //    for (Quote quote : quotes) {
+        //        done.add(CompanyLoader.getRental(quote.getRentalCompany()).confirmQuote(quote));
+        //    }
+        //} catch (Exception e) {
+        //    for(Reservation r:done)
+        //        CompanyLoader.getRental(r.getRentalCompany()).cancelReservation(r);
+        //    throw new ReservationException(e);
+        //}
+        //return done;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void setRenterName(String name) {
-        if (renter != null) {
-            throw new IllegalStateException("name already set");
-        }
-        renter = name;
+        //if (renter != null) {
+        //    throw new IllegalStateException("name already set");
+        //}
+        //renter = name;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

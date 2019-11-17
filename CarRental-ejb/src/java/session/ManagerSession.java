@@ -18,9 +18,8 @@ import rental.Reservation;
 @Stateless
 public class ManagerSession implements ManagerSessionRemote {
     
-    private static final String PERSISTENCE_UNIT_NAME = "CarRental-ejbPU";
-    private static EntityManagerFactory factory = 
-    Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+    @PersistenceContext(unitName = "CarRental-ejbPU")
+    EntityManager em;
 
 
     
@@ -78,12 +77,7 @@ public class ManagerSession implements ManagerSessionRemote {
     @Override
     public void loadCarRentalCompany(String file) {
         CarRentalCompany company = CompanyLoader.loadRental(file);
-        EntityManager em = factory.createEntityManager();
-        em.getTransaction().begin();
         em.persist(company);
-        em.getTransaction().commit();
-        em.close();
-        
     }
 
 }

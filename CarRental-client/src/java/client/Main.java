@@ -21,11 +21,15 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     public static void main(String[] args) throws Exception {
         // TODO: use updated manager interface to load cars into companies
+        System.out.println("eerst");
         Main main = new Main("trips");
+        System.out.println("tweede");
         ManagerSessionRemote ms = main.getNewManagerSession("Manager");
+        System.out.println("derde");
         ms.loadCarRentalCompany("hertz.csv");
+        System.out.println("vierde");
         ms.loadCarRentalCompany("dockx.csv");
-        main.run();
+        System.out.println("viijfde");
     }
 
     @Override
@@ -45,7 +49,8 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     @Override
     protected ManagerSessionRemote getNewManagerSession(String name) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InitialContext context = new InitialContext();
+        return (ManagerSessionRemote) context.lookup(ManagerSessionRemote.class.getName()); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

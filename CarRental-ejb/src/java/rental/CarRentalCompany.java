@@ -9,39 +9,49 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-@NamedQueries({
-    @NamedQuery(
-        name = "getAllRentalCompaniesNames",
-        query = "SELECT c.name FROM CarRentalRompany c"
-    ),
-    @NamedQuery(
-        name = "getAllRentalCompanies",
-        query = "SELECT c FROM CarRentalRompany c"
-    ),
-    @NamedQuery(
-        name = "getCompanyByName",
-        query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
-    ),
-    @NamedQuery(
-        name = "getAvailableCarTypes",
-        query = "SELECT c from CarT"
-    )
-})
+//@NamedQueries({
+//    @NamedQuery(
+//        name = "getAllRentalCompaniesNames",
+//        query = "SELECT c.name FROM CarRentalRompany c"
+//    ),
+//    @NamedQuery(
+//        name = "getAllRentalCompanies",
+//        query = "SELECT c FROM CarRentalRompany c"
+//    ),
+//    @NamedQuery(
+//        name = "getCompanyByName",
+//        query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
+//    ),
+//    @NamedQuery(
+//        name = "getAvailableCarTypes",
+//        query = "SELECT c from CarT"
+//    )
+//})
 public class CarRentalCompany implements Serializable {
 
     private static final transient Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private String name;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Car> cars;
-    @OneToMany
+    @ManyToMany(cascade=CascadeType.ALL)
     private Set<CarType> carTypes = new HashSet<CarType>();
     private List<String> regions;
 
