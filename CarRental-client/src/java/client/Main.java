@@ -22,13 +22,10 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     public static void main(String[] args) throws Exception {
         // TODO: use updated manager interface to load cars into companies
-        System.out.println("eerst");
         Main main = new Main("trips");
-        System.out.println("tweede");
         ManagerSessionRemote ms = main.getNewManagerSession("Manager");
-        System.out.println("derde");
         ms.loadCarRentalCompany("hertz.csv");
-        System.out.println("vierde");
+        ms.loadCarRentalCompany("dockx.csv");
     }
 
     @Override
