@@ -1,5 +1,6 @@
 package client;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +29,6 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         System.out.println("derde");
         ms.loadCarRentalCompany("hertz.csv");
         System.out.println("vierde");
-        ms.loadCarRentalCompany("dockx.csv");
-        System.out.println("viijfde");
     }
 
     @Override
@@ -44,7 +43,8 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     @Override
     protected CarRentalSessionRemote getNewReservationSession(String name) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        InitialContext context = new InitialContext();
+        return (CarRentalSessionRemote) context.lookup(CarRentalSessionRemote.class.getName()); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
