@@ -26,23 +26,22 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(
-        name = "getAllRentalCompaniesNames",
-        query = "SELECT c.name FROM CarRentalRompany c"
-    ),
-    @NamedQuery(
-        name = "getAllRentalCompanies",
-        query = "SELECT c FROM CarRentalRompany c"
-    ),
-    @NamedQuery(
-        name = "getCompanyByName",
-        query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
-    ),
-    @NamedQuery(
-        name = "getAvailableCarTypes",
-        query = "SELECT c from CarT"
-    )
-})
+        @NamedQuery(
+                name="getAllRentalCompaniesNames", 
+                query = "SELECT c.name FROM CarRentalCompany c"
+        ),
+        @NamedQuery(
+                name = "getAllRentalCompanies",
+                query = "SELECT c FROM CarRentalCompany c"
+        ),
+        @NamedQuery(
+                name = "getCompanyByName",
+                query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
+        ),
+        @NamedQuery(
+                name = "getAvailableCarTypes", 
+                query = "SELECT c from CarType c"
+        )})
 public class CarRentalCompany implements Serializable {
 
     private static final transient Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
