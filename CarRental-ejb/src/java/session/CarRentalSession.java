@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import rental.CarRentalCompany;
 import rental.CarType;
 import rental.Quote;
-import rental.CompanyLoader;
 import rental.Reservation;
 import rental.ReservationConstraints;
 import rental.ReservationException;

@@ -14,19 +14,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
@@ -50,11 +42,10 @@ public class CarRentalCompany implements Serializable {
 
     private static final transient Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private String name;
     @OneToMany(cascade=CascadeType.ALL)
     private List<Car> cars;
-    @ManyToMany(cascade={CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private Set<CarType> carTypes = new HashSet<CarType>();
     private List<String> regions;
 
@@ -85,14 +76,14 @@ public class CarRentalCompany implements Serializable {
         return name;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
     /***********
      * Regions *
      **********/
-    private void setRegions(List<String> regions) {
+    public void setRegions(List<String> regions) {
         this.regions = regions;
     }
     
@@ -106,6 +97,7 @@ public class CarRentalCompany implements Serializable {
 
     /*************
      * CAR TYPES *
+     * @return 
      *************/
     public Collection<CarType> getAllTypes() {
         return carTypes;
