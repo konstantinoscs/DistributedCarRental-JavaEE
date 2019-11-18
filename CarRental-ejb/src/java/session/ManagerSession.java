@@ -138,13 +138,25 @@ public class ManagerSession implements ManagerSessionRemote {
         for (CarRentalCompany company : companies) {
             updateMap(reservations, company.getClientsWithReservations());
         }
-        //TODO figure out how to express this in java source 1.7
-        max = Collections.max(reservations.entrySet(), Map.Entry.comparingByValue()).getValue();
+        
+        //max = Collections.max(reservations.entrySet(), Map.Entry.comparingByValue()).getValue();
+        Map.Entry<String, Integer> maxEntry = null;
+        for (Map.Entry<String, Integer> entry : reservations.entrySet()) {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
+                maxEntry = entry;
+            }
+        }
         // after we found the max, get all clients that have max number of reservations
-        return reservations.entrySet().stream()
+        Set<String> best = new HashSet<>();
+        for (Map.Entry<String, Integer> entry : reservations.entrySet()) {
+            if(entry.getValue().equals(maxEntry.getValue()))
+                best.add(entry.getKey());
+        }
+        return best;
+        /*return reservations.entrySet().stream()
                 .filter(e -> e.getValue().equals(max))
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());*/
     }
     
     
