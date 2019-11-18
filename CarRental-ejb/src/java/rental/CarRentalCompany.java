@@ -2,6 +2,8 @@ package rental;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -144,7 +146,14 @@ public class CarRentalCompany implements Serializable {
         }
         if (carTypeReservations.isEmpty())
             return null;
-        return Collections.max(carTypeReservations.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+        
+        Map.Entry<CarType, Integer> maxEntry = null;
+        for (Map.Entry<CarType, Integer> entry : carTypeReservations.entrySet()) {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry.getKey();
     }
 
     /*********
