@@ -25,6 +25,6 @@ public interface CarRentalSessionRemote {
     
     public List<Quote> getCurrentQuotes();
     
-    public List<Reservation> confirmQuotes() throws ReservationException;
+    public List<Reservation> confirmQuotes() throws Exception;
     
 }

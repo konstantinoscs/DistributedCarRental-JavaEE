@@ -5,10 +5,14 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Resource;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.UserTransaction;
 import rental.CarRentalCompany;
 import rental.CarType;
 import rental.Quote;
@@ -17,10 +21,14 @@ import rental.ReservationConstraints;
 import rental.ReservationException;
 
 @Stateful
+@TransactionManagement(TransactionManagementType.BEAN)
 public class CarRentalSession implements CarRentalSessionRemote {
     
     @PersistenceContext
     EntityManager em;
+    
+    @Resource
+    UserTransaction utx;
     
     private String renter;
     private List<Quote> quotes = new LinkedList<>();
@@ -101,25 +109,23 @@ public class CarRentalSession implements CarRentalSessionRemote {
     
 
     @Override
-    public List<Reservation> confirmQuotes() throws ReservationException {
+    public List<Reservation> confirmQuotes() throws Exception {
         List<Reservation> done = new LinkedList<Reservation>();
         try {
+            utx.begin();
             for (Quote quote : quotes) {
                 CarRentalCompany company = em.find(CarRentalCompany.class, quote.getRentalCompany());
-                done.add(company.confirmQuote(quote));
+                Reservation res = company.confirmQuote(quote);
+                done.add(res);
+                em.persist(res);
             }
+            utx.commit();
         } catch (Exception e) {
-            for(Reservation r:done) {
-                CarRentalCompany company = em.find(CarRentalCompany.class, r.getRentalCompany());
-                company.cancelReservation(r);
-            }
+            utx.rollback();
             throw new ReservationException(e);
         }
         
-        //save reservations in the db
-        for(Reservation res: done) { 
-            em.persist(res);
-        }
+        
         //this.quotes.clear();
         return done;
     }
