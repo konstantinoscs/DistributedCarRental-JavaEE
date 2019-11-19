@@ -1,8 +1,9 @@
 package rental;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReservationConstraints {
+public class ReservationConstraints implements Serializable {
     
     private Date startDate;
     private Date endDate;

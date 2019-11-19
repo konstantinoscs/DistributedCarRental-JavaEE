@@ -26,6 +26,7 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         ManagerSessionRemote ms = main.getNewManagerSession("Manager");
         ms.loadCarRentalCompany("hertz.csv");
         ms.loadCarRentalCompany("dockx.csv");
+        main.run();
     }
 
     @Override
