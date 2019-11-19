@@ -30,7 +30,11 @@ import javax.persistence.OneToMany;
         ),
         @NamedQuery(
                 name = "getAllCarTypes",
-                query ="SELECT c FROM CarRentalCompany c JOIN c.carTypes ct WHERE c.name = :name"
+                query ="SELECT DISTINCT c FROM CarRentalCompany c JOIN c.carTypes ct WHERE c.name = :name"
+        ),
+        @NamedQuery(
+                name = "getCarIds",
+                query = "SELECT DISTINCT c FROM CarRentalCompany c, IN (c.cars) as crs WHERE c.name = :name AND crs.type = :type"
         )
 })
 public class CarRentalCompany implements Serializable {

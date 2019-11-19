@@ -29,15 +29,12 @@ public class ManagerSession implements ManagerSessionRemote {
     
     @PersistenceContext(unitName = "CarRental-ejbPU")
     EntityManager em;
-
-
     
     @Override
     public Set<CarType> getCarTypes(String company) {
-        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
-        TypedQuery<CarType> q = em.createNamedQuery("getAllCarTypes", CarType.class);
+        TypedQuery<CarType> q = em.createNamedQuery("getAllCarTypes", CarType.class)
+                .setParameter("name", company);
         List<CarType> carTypes = q.getResultList();
-        //System.out.println("CarTypes: " + carTypes.toString());
         try {
             return new HashSet<CarType>(carTypes);
         } catch (IllegalArgumentException ex) {
@@ -48,12 +45,12 @@ public class ManagerSession implements ManagerSessionRemote {
 
     @Override
     public Set<Integer> getCarIds(String company, String type) {
-        Set<Integer> out = new HashSet<Integer>();
-        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
+        Set<Integer> out = null;
+        TypedQuery<Integer> q = em.createNamedQuery("getCarIds", Integer.class)
+                .setParameter("name", company)
+                .setParameter("type", type);
         try {
-            for(Car c: crc.getCars(type)){
-                out.add(c.getId());
-            }
+            out = new HashSet<Integer>(q.getResultList());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return null;
