@@ -40,7 +40,7 @@ public class CarRentalCompany implements Serializable {
     private String name;
     @OneToMany(cascade=CascadeType.ALL)
     private List<Car> cars;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToMany(cascade=CascadeType.ALL)
     private Set<CarType> carTypes = new HashSet<CarType>();
     private List<String> regions;
 
