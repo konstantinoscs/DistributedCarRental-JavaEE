@@ -27,6 +27,10 @@ import javax.persistence.OneToMany;
         @NamedQuery(
                 name = "getAllRentalCompanies",
                 query = "SELECT c FROM CarRentalCompany c"
+        ),
+        @NamedQuery(
+                name = "getAllCarTypes",
+                query ="SELECT c.carTypes FROM CarRentalCompany c WHERE c.name = :name"
         )
 })
 public class CarRentalCompany implements Serializable {
