@@ -90,7 +90,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
         if (quote == null)
             throw new ReservationException("Didn't find an available quote for these constraints");
         
-        this.quotes.add(quote);
+        //this.quotes.add(quote);
         return quote;
     }
 
@@ -124,6 +124,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
         for(Reservation res: done) { 
             em.persist(res);
         }
+        this.quotes.clear();
         return done;
     }
 
