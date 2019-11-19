@@ -23,17 +23,17 @@ public class CarRentalSession implements CarRentalSessionRemote {
     EntityManager em;
     
     private String renter;
-    private List<Quote> quotes = new LinkedList<Quote>();
+    private List<Quote> quotes = new LinkedList<>();
 
     @Override
     public Set<String> getAllRentalCompanies() {
         TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
-        return new HashSet<String>(q.getResultList());
+        return new HashSet<>(q.getResultList());
     }
     
     @Override
     public List<CarType> getAvailableCarTypes(Date start, Date end) {
-        List<CarType> availableCarTypes = new LinkedList<CarType>();
+        List<CarType> availableCarTypes = new LinkedList<>();
         TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
         List<CarRentalCompany> companies = q.getResultList();
         for(CarRentalCompany crc : companies) {
@@ -89,7 +89,8 @@ public class CarRentalSession implements CarRentalSessionRemote {
         }
         if (quote == null)
             throw new ReservationException("Didn't find an available quote for these constraints");
-
+        
+        this.quotes.add(quote);
         return quote;
     }
 
@@ -120,7 +121,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
         }
         
         //save reservations in the db
-        for(Reservation res: done) {
+        for(Reservation res: done) { 
             em.persist(res);
         }
         return done;
