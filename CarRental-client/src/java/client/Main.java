@@ -1,12 +1,9 @@
 package client;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.naming.InitialContext;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import rental.CarType;
 import rental.Reservation;
 import rental.ReservationConstraints;
@@ -31,24 +28,24 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     @Override
     protected Set<String> getBestClients(ManagerSessionRemote ms) throws Exception {
-        return ms.getBestClients(); //To change body of generated methods, choose Tools | Templates.
+        return ms.getBestClients(); 
     }
 
     @Override
     protected String getCheapestCarType(CarRentalSessionRemote session, Date start, Date end, String region) throws Exception {
-        return session.getCheapestCarType(start, end, region); //To change body of generated methods, choose Tools | Templates.
+        return session.getCheapestCarType(start, end, region);
     }
 
     @Override
     protected CarRentalSessionRemote getNewReservationSession(String name) throws Exception {
         InitialContext context = new InitialContext();
-        return (CarRentalSessionRemote) context.lookup(CarRentalSessionRemote.class.getName()); //To change body of generated methods, choose Tools | Templates.
+        return (CarRentalSessionRemote) context.lookup(CarRentalSessionRemote.class.getName());
     }
 
     @Override
     protected ManagerSessionRemote getNewManagerSession(String name) throws Exception {
         InitialContext context = new InitialContext();
-        return (ManagerSessionRemote) context.lookup(ManagerSessionRemote.class.getName()); //To change body of generated methods, choose Tools | Templates.
+        return (ManagerSessionRemote) context.lookup(ManagerSessionRemote.class.getName());
     }
 
     @Override
@@ -76,16 +73,16 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
             //e.printStackTrace();
             throw new Exception("Couldn't get the number of reservations by renter.");
         }
-        return numberOfReservationsByRenter; //To change body of generated methods, choose Tools | Templates.
+        return numberOfReservationsByRenter;
     }
 
     @Override
     protected int getNumberOfReservationsForCarType(ManagerSessionRemote ms, String carRentalName, String carType) throws Exception {
-        return ms.getNumberOfReservationsForCarType(carRentalName, carType); //To change body of generated methods, choose Tools | Templates.
+        return ms.getNumberOfReservationsForCarType(carRentalName, carType);
     }
 
     @Override
     protected CarType getMostPopularCarTypeIn(ManagerSessionRemote ms, String carRentalCompanyName, int year) throws Exception {
-        return ms.getMostPopularCarTypeIn(carRentalCompanyName, year); //To change body of generated methods, choose Tools | Templates.
+        return ms.getMostPopularCarTypeIn(carRentalCompanyName, year);
     }
 }
