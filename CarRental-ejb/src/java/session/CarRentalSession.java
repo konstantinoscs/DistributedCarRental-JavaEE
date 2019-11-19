@@ -12,6 +12,7 @@ import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -111,6 +112,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
     @Override
     public List<Reservation> confirmQuotes() throws Exception {
         List<Reservation> done = new LinkedList<Reservation>();
+        boolean failed = false;
         try {
             utx.begin();
             for (Quote quote : quotes) {
@@ -121,10 +123,15 @@ public class CarRentalSession implements CarRentalSessionRemote {
             }
             utx.commit();
         } catch (Exception e) {
-            utx.rollback();
-            throw new ReservationException(e);
+            failed = true;
+            if (utx.getStatus()==Status.STATUS_ACTIVE){
+                utx.rollback();
+            }
         }
         
+        if (failed) {
+            throw new ReservationException("Couldn't confirm quotes!");
+        }
         
         //this.quotes.clear();
         return done;

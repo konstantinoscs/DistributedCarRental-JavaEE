@@ -34,9 +34,16 @@ public class ManagerSession implements ManagerSessionRemote {
     
     @Override
     public Set<CarType> getCarTypes(String company) {
-        TypedQuery<CarType> q = em.createNamedQuery("getAllCarTypes", CarType.class)
-                .setParameter("name", company);
-        return new HashSet<CarType>(q.getResultList());
+        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
+        TypedQuery<CarType> q = em.createNamedQuery("getAllCarTypes", CarType.class);
+        List<CarType> carTypes = q.getResultList();
+        //System.out.println("CarTypes: " + carTypes.toString());
+        try {
+            return new HashSet<CarType>(carTypes);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     @Override
@@ -133,6 +140,10 @@ public class ManagerSession implements ManagerSessionRemote {
                 best.add(entry.getKey());
         }
         return best;
+        /*return reservations.entrySet().stream()
+                .filter(e -> e.getValue().equals(max))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());*/
     }
     
     
