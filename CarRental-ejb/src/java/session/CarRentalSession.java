@@ -68,17 +68,29 @@ public class CarRentalSession implements CarRentalSessionRemote {
     }
 
     @Override
-    public Quote createQuote(String company, ReservationConstraints constraints) throws ReservationException {
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        try {
-            CarRentalCompany crc = q.getSingleResult();
-            Quote out = crc.createQuote(constraints, renter);
-            quotes.add(out);
-            return out;
-        } catch(Exception e) {
+    public Quote createQuote(String clientName, ReservationConstraints constraints) throws ReservationException {
+        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getAllRentalCompanies", CarRentalCompany.class);
+        List<CarRentalCompany> companies;
+        try {   // if no companies found, throw excpetion
+            companies = q.getResultList();
+        } catch (Exception e) {
             throw new ReservationException(e);
         }
+        
+        Quote quote = null;
+
+        for (CarRentalCompany company : companies) {
+            try {
+                quote = company.createQuote(constraints, clientName);
+            } catch (Exception e) {
+                continue;
+            }
+            break;
+        }
+        if (quote == null)
+            throw new ReservationException("Didn't find an available quote for these constraints");
+
+        return quote;
     }
 
     @Override

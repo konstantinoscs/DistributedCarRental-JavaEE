@@ -2,8 +2,6 @@ package rental;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,11 +31,8 @@ import javax.persistence.OneToMany;
         @NamedQuery(
                 name = "getCompanyByName",
                 query = "SELECT c FROM CarRentalCompany c WHERE c.name = :name"
-        ),
-        @NamedQuery(
-                name = "getAvailableCarTypes", 
-                query = "SELECT c from CarType c"
-        )})
+        )
+})
 public class CarRentalCompany implements Serializable {
 
     private static final transient Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
