@@ -34,9 +34,7 @@ public class ManagerSession implements ManagerSessionRemote {
     
     @Override
     public Set<CarType> getCarTypes(String company) {
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        CarRentalCompany crc = q.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
         try {
             return new HashSet<CarType>(crc.getAllTypes());
         } catch (IllegalArgumentException ex) {
@@ -48,9 +46,7 @@ public class ManagerSession implements ManagerSessionRemote {
     @Override
     public Set<Integer> getCarIds(String company, String type) {
         Set<Integer> out = new HashSet<Integer>();
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        CarRentalCompany crc = q.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
         try {
             for(Car c: crc.getCars(type)){
                 out.add(c.getId());
@@ -64,9 +60,7 @@ public class ManagerSession implements ManagerSessionRemote {
 
     @Override
     public int getNumberOfReservations(String company, String type, int id) {
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        CarRentalCompany crc = q.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
         try {
             return crc.getCar(id).getReservations().size();
         } catch (IllegalArgumentException ex) {
@@ -78,9 +72,7 @@ public class ManagerSession implements ManagerSessionRemote {
     @Override
     public int getNumberOfReservations(String company, String type) {
         Set<Reservation> out = new HashSet<Reservation>();
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", company);
-        CarRentalCompany crc = q.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
         try {
             for(Car c: crc.getCars(type)){
                 out.addAll(c.getReservations());
@@ -109,9 +101,7 @@ public class ManagerSession implements ManagerSessionRemote {
         Set<String> companies =  new HashSet<String>(q.getResultList());
         if (!companies.contains(carRentalName))
             throw new Exception("Requested Car Rental Company is not registered!");
-        TypedQuery<CarRentalCompany> p = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", carRentalName);
-        CarRentalCompany crc = p.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, carRentalName);
         return crc.getNumberOfReservationsForCarType(carType);
     }
     
@@ -121,9 +111,7 @@ public class ManagerSession implements ManagerSessionRemote {
         Set<String> companies =  new HashSet<String>(q.getResultList());
         if (!companies.contains(carRentalCompanyName))
             throw new Exception("Requested Car Rental Company is not registered!");
-        TypedQuery<CarRentalCompany> p = em.createNamedQuery("getCompanyByName", CarRentalCompany.class)
-                .setParameter("name", carRentalCompanyName);
-        CarRentalCompany crc = p.getSingleResult();
+        CarRentalCompany crc = em.find(CarRentalCompany.class, carRentalCompanyName);
         return crc.getMostPopularCarTypeIn(year);
     }
     

@@ -90,7 +90,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
         if (quote == null)
             throw new ReservationException("Didn't find an available quote for these constraints");
         
-        //this.quotes.add(quote);
+        this.quotes.add(quote);
         return quote;
     }
 
@@ -103,18 +103,14 @@ public class CarRentalSession implements CarRentalSessionRemote {
     @Override
     public List<Reservation> confirmQuotes() throws ReservationException {
         List<Reservation> done = new LinkedList<Reservation>();
-        TypedQuery<CarRentalCompany> q = em.createNamedQuery("getCompanyByName", CarRentalCompany.class);
         try {
             for (Quote quote : quotes) {
-                //set name at the query for each quote
-                q.setParameter("name", quote.getRentalCompany());
-                CarRentalCompany company = q.getSingleResult();
+                CarRentalCompany company = em.find(CarRentalCompany.class, quote.getRentalCompany());
                 done.add(company.confirmQuote(quote));
             }
         } catch (Exception e) {
             for(Reservation r:done) {
-                q.setParameter("name", r.getRentalCompany());
-                CarRentalCompany company = q.getSingleResult();
+                CarRentalCompany company = em.find(CarRentalCompany.class, r.getRentalCompany());
                 company.cancelReservation(r);
             }
             throw new ReservationException(e);
@@ -124,7 +120,7 @@ public class CarRentalSession implements CarRentalSessionRemote {
         for(Reservation res: done) { 
             em.persist(res);
         }
-        this.quotes.clear();
+        //this.quotes.clear();
         return done;
     }
 
