@@ -1,10 +1,12 @@
 package session;
 
 import java.util.Set;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Remote;
 import rental.CarType;
 
 @Remote
+@RolesAllowed("Manager")
 public interface ManagerSessionRemote {
     
     public Set<CarType> getCarTypes(String company);
