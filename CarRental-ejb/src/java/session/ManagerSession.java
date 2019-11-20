@@ -58,17 +58,20 @@ public class ManagerSession implements ManagerSessionRemote {
         return out;
     }
 
+    //get number of reservations of a specific car
     @Override
     public int getNumberOfReservations(String company, String type, int id) {
-        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
+        TypedQuery<Integer> q = em.createNamedQuery("getReservationsOfCar", Integer.class)
+                .setParameter("id", id);
         try {
-            return crc.getCar(id).getReservations().size();
+            return q.getSingleResult();
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
         }
     }
 
+    //get number of reservations for a carType
     @Override
     public int getNumberOfReservations(String company, String type) {
         Set<Reservation> out = new HashSet<Reservation>();

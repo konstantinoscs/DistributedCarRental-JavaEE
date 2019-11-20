@@ -2,12 +2,22 @@ package rental;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQuery(
+                name = "getReservationsOfCar",
+                query = "SELECT COUNT(r) FROM Reservation r WHERE r.carId =:id"
+        )
 public class Reservation extends Quote implements Serializable {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
     private int carId;
     
     /***************
