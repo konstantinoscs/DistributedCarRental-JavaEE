@@ -1,0 +1,43 @@
+\documentclass{ds-report}
+
+\assignment{Java EE} % Set to `Java RMI`, `Java EE` or `Google App Engine`.
+\authorOne{Konstantinos Stefanidis Vozikis} % Name of first team partner.
+\studentnumberOne{r0123456} % Student number of first team partner.
+\authorTwo{Sofie Landuyt} % Name of second team partner.
+\studentnumberTwo{r1234567}  % Student number of second team partner.
+
+\begin{document}
+	\maketitle
+
+	\paragraph{Question 1: Outline the different tiers of your application, and indicate where classes are located.\\} 
+	Answer 1
+	
+	\paragraph{Question 2: Why are client and manager session beans stateful and stateless respectively?\\} 
+	The client session bean has to maintain the state of the client. The stateful session bean is closely connected to the client since the instance variables represent the state of a unique session. 
+	The manager session had to be able to support multiple clients. 
+	The stateless session bean does not maintain state associated with any client and when the client disappears, the stateless bean does not get destroyed and can serve the next request from another client.
+	\paragraph{Question 3: How does dependency injection compare to the RMI registry of the RMI assignment?\\} 
+	
+	\paragraph{Question 4: JPQL persistence queries without application logic are the recommended approach for retrieving rental statistics. Can you explain why this is more efficient?\\} 
+	
+	
+	\paragraph{Question 5: How does your solution compare with the Java RMI assignment in terms of resilience against server crashes?\\} 
+	RMI registry is not resilience to crashes. If you have to stop and start the RMI registry then you would need to re-register all your objects with it.
+	
+	\paragraph{Question 6: How does the Java EE middleware reduce the effort of migrating to another database engine?\\} 
+		The benefit of using JPA and JPQL is database portability. The application server is responsible for handling the differences between different databases. The JPA also defines a SPI (Server Provider Interface) to support plugability of persistence providers into an application server.
+		
+	\paragraph{Question 7: How does your solution to concurrency prevent race conditions?\\} 
+	
+	\paragraph{Question 8: How do transactions compare to synchronization in Java RMI in terms of the scalability of your application?\\} 
+	Transactions ensure data integrity. Transactions control the concurrent access of data by multiple programs. In the event of a system failure, transactions make sure that after recovery, the data will be in a consistent state. Java RMI only supports the thread per request model, that is not scalable.
+	
+	\paragraph{Question 9: How do you ensure that only users that have specifically been assigned a manager role can open a ManagerSession and access the manager functionality?\\} 
+	
+	\paragraph{Question 10: Why would someone choose a Java EE solution over a regular Java SE application with Java RMI?\\} 
+	The Java EE platform is built on top of SE platform. SE defines everything from the basic types and objects of the Java programming language but Java EE provides an API and runtime environment for developing and running large-scale applications. SE has no separation of code into different layers, while EE is a multi-tier application, providing security and reusability.
+	\clearpage
+	
+	% You can include diagrams here.
+	
+\end{document}
