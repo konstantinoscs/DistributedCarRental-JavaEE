@@ -60,31 +60,19 @@ public class ManagerSession implements ManagerSessionRemote {
 
     //get number of reservations of a specific car
     @Override
-    public int getNumberOfReservations(String company, String type, int id) {
-        TypedQuery<Integer> q = em.createNamedQuery("getReservationsOfCar", Integer.class)
+    public int getNumberOfReservations(String company, String type, int id) throws Exception {
+        TypedQuery<Long> q = em.createNamedQuery("getReservationsOfCar", Long.class)
                 .setParameter("id", id);
-        try {
-            return q.getSingleResult();
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
+            return q.getSingleResult().intValue();
     }
 
     //get number of reservations for a carType
     @Override
-    public int getNumberOfReservations(String company, String type) {
-        Set<Reservation> out = new HashSet<Reservation>();
-        CarRentalCompany crc = em.find(CarRentalCompany.class, company);
-        try {
-            for(Car c: crc.getCars(type)){
-                out.addAll(c.getReservations());
-            }
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ManagerSession.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
-        }
-        return out.size();
+    public int getNumberOfReservations(String company, String CarType) throws Exception {
+        TypedQuery<Long> q = em.createNamedQuery("getReservationsOfCarTypeInCompany", Long.class)
+                .setParameter("company", company)
+                .setParameter("type", CarType);
+        return q.getSingleResult().intValue();
     }
     
     @Override
@@ -96,16 +84,6 @@ public class ManagerSession implements ManagerSessionRemote {
             noOfReservations += company.getNoOfReservationsBy(clientName);
         }
         return noOfReservations;
-    }
-    
-    @Override
-    public int getNumberOfReservationsForCarType(String carRentalName, String carType) throws Exception {
-        TypedQuery<String> q = em.createNamedQuery("getAllRentalCompaniesNames", String.class);
-        Set<String> companies =  new HashSet<String>(q.getResultList());
-        if (!companies.contains(carRentalName))
-            throw new Exception("Requested Car Rental Company is not registered!");
-        CarRentalCompany crc = em.find(CarRentalCompany.class, carRentalName);
-        return crc.getNumberOfReservationsForCarType(carType);
     }
     
     @Override

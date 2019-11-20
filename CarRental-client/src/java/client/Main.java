@@ -78,7 +78,7 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     @Override
     protected int getNumberOfReservationsForCarType(ManagerSessionRemote ms, String carRentalName, String carType) throws Exception {
-        return ms.getNumberOfReservationsForCarType(carRentalName, carType);
+        return ms.getNumberOfReservations(carRentalName, carType);
     }
 
     @Override

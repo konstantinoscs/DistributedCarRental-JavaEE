@@ -11,13 +11,11 @@ public interface ManagerSessionRemote {
     
     public Set<Integer> getCarIds(String company,String type);
     
-    public int getNumberOfReservations(String company, String type, int carId);
+    public int getNumberOfReservations(String company, String type, int carId) throws Exception;
     
-    public int getNumberOfReservations(String company, String type);
+    public int getNumberOfReservations(String company, String type) throws Exception;
     
     public int getNumberOfReservationsBy(String clientName);
-    
-    public int getNumberOfReservationsForCarType(String carRentalName, String carType) throws Exception;
     
     public CarType getMostPopularCarTypeIn(String carRentalCompanyName, int year) throws Exception;
     
