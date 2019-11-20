@@ -2,7 +2,7 @@
 
 \assignment{Java EE} % Set to `Java RMI`, `Java EE` or `Google App Engine`.
 \authorOne{Konstantinos Stefanidis Vozikis} % Name of first team partner.
-\studentnumberOne{r0123456} % Student number of first team partner.
+\studentnumberOne{r0776192} % Student number of first team partner.
 \authorTwo{Sofie Landuyt} % Name of second team partner.
 \studentnumberTwo{r0665451}  % Student number of second team partner.
 
@@ -10,7 +10,9 @@
 	\maketitle
 
 	\paragraph{Question 1: Outline the different tiers of your application, and indicate where classes are located.\\} 
-	Answer 1
+	The different tiers of our application are the client tier, the business tier and the database tier. 
+	The classes of the client tier are in the "CarRental-client" Enterprise Application Client, and the classes of the business tier are "CarRental-ejb" EJB module project as well as in the "CarRental-lib" 
+	subproject.
 	
 	\paragraph{Question 2: Why are client and manager session beans stateful and stateless respectively?\\} 
 	The client session bean has to maintain the state of the client. The stateful session bean is closely connected to the client since the instance variables represent the state of a unique session. 
@@ -33,6 +35,7 @@
 	Transactions ensure data integrity. Transactions control the concurrent access of data by multiple programs. In the event of a system failure, transactions make sure that after recovery, the data will be in a consistent state. Java RMI only supports the thread per request model, that is not scalable.
 	
 	\paragraph{Question 9: How do you ensure that only users that have specifically been assigned a manager role can open a ManagerSession and access the manager functionality?\\} 
+	We have enforced the security measures for allowing only the appropriate users to access 
 	
 	\paragraph{Question 10: Why would someone choose a Java EE solution over a regular Java SE application with Java RMI?\\} 
 	The Java EE platform is built on top of SE platform. SE defines everything from the basic types and objects of the Java programming language but Java EE provides an API and runtime environment for developing and running large-scale applications. SE has no separation of code into different layers, while EE is a multi-tier application, providing security and reusability.
