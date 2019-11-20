@@ -17,9 +17,9 @@
 	The manager session had to be able to support multiple clients. 
 	The stateless session bean does not maintain state associated with any client and when the client disappears, the stateless bean does not get destroyed and can serve the next request from another client.
 	\paragraph{Question 3: How does dependency injection compare to the RMI registry of the RMI assignment?\\} 
-	
+	Dependency injection will pass the service to the client. When using RMI registry, the client has to lookup and find the service itself. (IS THIS CORRECT KONSTANTINOS?)
 	\paragraph{Question 4: JPQL persistence queries without application logic are the recommended approach for retrieving rental statistics. Can you explain why this is more efficient?\\} 
-	
+	The results retrieved by JPQL queries are entity instances. JPQL deals with entities instead of dealing with database structures directly. Thus, it simplifies the task of retrieving entity instances which is interesting when analysing rental statistics.
 	
 	\paragraph{Question 5: How does your solution compare with the Java RMI assignment in terms of resilience against server crashes?\\} 
 	RMI registry is not resilience to crashes. If you have to stop and start the RMI registry then you would need to re-register all your objects with it.
