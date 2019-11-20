@@ -20,7 +20,6 @@ import javax.persistence.TypedQuery;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
-import rental.Reservation;
 
 @Stateless
 public class ManagerSession implements ManagerSessionRemote {
@@ -118,10 +117,6 @@ public class ManagerSession implements ManagerSessionRemote {
                 best.add(entry.getKey());
         }
         return best;
-        /*return reservations.entrySet().stream()
-                .filter(e -> e.getValue().equals(max))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());*/
     }
     
     
