@@ -19,7 +19,10 @@
 	The manager session had to be able to support multiple clients. 
 	The stateless session bean does not maintain state associated with any client and when the client disappears, the stateless bean does not get destroyed and can serve the next request from another client.
 	\paragraph{Question 3: How does dependency injection compare to the RMI registry of the RMI assignment?\\} 
-	Dependency injection will pass the service to the client. When using RMI registry, the client has to lookup and find the service itself. (IS THIS CORRECT KONSTANTINOS?)
+	When using RMI, the client has to manually lookup and find the interface that it wants to use. On the 
+	other hand, in javaEE, dependency injection is used to automatically fill bean interfaces with an EJB 
+	that provides the requested interface.
+	
 	\paragraph{Question 4: JPQL persistence queries without application logic are the recommended approach for retrieving rental statistics. Can you explain why this is more efficient?\\} 
 	The results retrieved by JPQL queries are entity instances. JPQL deals with entities instead of dealing with database structures directly. Thus, it simplifies the task of retrieving entity instances which is interesting when analysing rental statistics.
 	
@@ -30,6 +33,9 @@
 		The benefit of using JPA and JPQL is database portability. The application server is responsible for handling the differences between different databases. The JPA also defines a SPI (Server Provider Interface) to support plugability of persistence providers into an application server.
 		
 	\paragraph{Question 7: How does your solution to concurrency prevent race conditions?\\} 
+	We use transactions on the confirmQuotes method to control the concurrent access of data by multiple 
+	threads. In that way, we enforce data integrity and prevent race conditions. Also by using transactions 
+	we make sure that the data will be in a valid state even in an event of a server failure.
 	
 	\paragraph{Question 8: How do transactions compare to synchronization in Java RMI in terms of the scalability of your application?\\} 
 	Transactions ensure data integrity. Transactions control the concurrent access of data by multiple programs. In the event of a system failure, transactions make sure that after recovery, the data will be in a consistent state. Java RMI only supports the thread per request model, that is not scalable.
